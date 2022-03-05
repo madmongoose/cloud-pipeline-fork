@@ -25,6 +25,7 @@
 - [Saving of interim data for jobs stopped by a timeout](#saving-of-interim-data-for-jobs-stopped-by-a-timeout)
 - [Resolve variables for a rerun](#resolve-variables-for-a-rerun)
 - [NAT gateway](#nat-gateway)
+- [Custom Run capabilities](#custom-run-capabilities)
 - [AWS: seamless authentication](#aws-seamless-authentication)
 - [AWS: transfer objects between AWS regions](#aws-transfer-objects-between-aws-regions-using-pipe-storage-cpmv-commands)
 
@@ -889,6 +890,46 @@ To add a route, admin shall:
     ![CP_v.0.17_ReleaseNotes](attachments/RN017_NatGateway_05.png)
 
 For more details see [here](../../manual/12_Manage_Settings/12.14._NAT_gateway.md).
+
+## Custom Run capabilities
+
+Previously, users might select only predefined "system" **Run capabilities** for a job.  
+In some cases or deployments, these capabilities may not be enough.  
+In the current version, the ability for admins to add custom **Run capabilities** was implemented. Use them for a job/tool run all users can.
+
+Managing of the custom capabilities is being performed via the new system preference **`launch.capabilities`**.  
+This preference contains an array of capability descriptions in `JSON`-format and has the following structure:
+
+``` json
+{
+  "<capability_name_1>": {
+    "description": "<Description of the capability>",
+    "commands": [
+        "<command_1>",
+        "<command_2>",
+        ...
+    ],
+    "params": {
+        "<parameter_1>": "<value_1>",
+        "<parameter_2>": "<value_2>",
+        ...
+    }
+  },
+  "<capability_name_2": {
+      ...
+  },
+  ...
+}
+```
+
+For example:  
+    ![CP_v.0.17_ReleaseNotes](attachments/RN017_RunCapabilities_1.png)
+
+Saved capability then can be used for a job/tool:  
+    ![CP_v.0.17_ReleaseNotes](attachments/RN017_RunCapabilities_2.png)  
+    ![CP_v.0.17_ReleaseNotes](attachments/RN017_RunCapabilities_3.png)
+
+For more details see [here](../../manual/10_Manage_Tools/10.9._Run_capabilities.md#custom-capabilities).
 
 ## AWS: seamless authentication
 
