@@ -8,3 +8,5 @@ api/src/main/resources/static/
 .vscode/
 docs/site
 dist
+.DS_Store
+.gitignore
