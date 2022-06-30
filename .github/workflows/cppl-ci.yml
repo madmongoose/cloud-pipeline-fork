@@ -10,7 +10,7 @@ on:
     - 'develop'
     - 'release/**'
     paths-ignore:
-      #- ".github/workflows/**"
+      - ".github/workflows/**"
       - ".README.md"
       - ".gitignore"
       - "quick-launcher/**"
@@ -84,7 +84,7 @@ jobs:
         cache: "gradle"
     - uses: actions/setup-node@v3
       with:
-        node-version: 3
+        node-version: 8
     - run: npm install
     - name: Configure AWS Credentials
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
