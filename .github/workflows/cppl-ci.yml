@@ -1,0 +1,115 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: cppl-ci
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: 
+    - 'develop'
+    - 'release/**'
+    paths-ignore:
+      #- ".github/workflows/**"
+      - ".README.md"
+      - ".gitignore"
+      - "quick-launcher/**"
+  pull_request:
+    branches: 
+      - '**'
+    paths-ignore:
+      - ".github/workflows/**"
+      - ".README.md"
+      - ".gitignore"
+      - "quick-launcher/**"
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  build1:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Java JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: "temurin" # See 'Supported distributions' for available options
+        java-version: "8"
+        cache: "gradle"
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '10'
+    - run: npm install
+    #- name: Use Node.js
+      #uses: actions/setup-node@v2
+      #with:
+        #node-version: "10"
+        #cache: 'npm'
+    - name: Configure AWS Credentials
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Buld only for macOS
+      #id: test-macos
+      #if: matrix.os == 'macos-latest'
+      run: bash deploy/gha/gha-build-macos.sh
+      
+  build2:
+    
+    runs-on: ubuntu-18.04
+    #runs-on: ${{ matrix.os }}
+    needs: build1
+    #strategy:
+      #matrix:
+        #os: [macos-latest, ubuntu-latest]
+        #os: [macos-latest]
+        #node: [10]
+        #java: [8]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Java JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: "temurin" # See 'Supported distributions' for available options
+        java-version: "8"
+        cache: "gradle"
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '10'
+    - run: npm install
+    - name: Configure AWS Credentials
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    #- name: Set the correct Node version using nvm
+      #shell: bash -l {0} 
+      #run: nvm install
+    #- name: Install Dependencies
+      #run: npm install
+    #- run: npm install -g npm
+    - name: Install dependencies
+      run: pip install wheel
+    - name: Buld for All
+      shell: bash -l {0}
+      run: |
+          python -m pip install awscli==1.14.56 mkdocs
+          bash deploy/gha/gha-pack-dist.sh
+#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
+#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
+#sudo -E bash -s <<EOF
+#python2 -m pip install awscli==1.14.56 mkdocs
+#curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7 
+#python get-pip.py
+#pip --version
+#sudo apt install python2
+#python -V
