@@ -74,7 +74,7 @@ jobs:
       shell: bash -l {0}
       run: |-
         sudo -E bash -s <<EOF
-          pip2 install awscli==1.14.56 mkdocs
+          pip install awscli==1.14.56 mkdocs
           bash deploy/appveyor/appveyor_pack_dist.sh
         EOF
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
