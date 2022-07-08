@@ -54,14 +54,13 @@ _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -Pb
 mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
 mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+npm install --save react-tinder-card --legacy-peer-deps
 
 ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
                     -Pprofile=release \
                     -x test \
                     -Pfast \
-                    --no-daemon \
-                    --force
+                    --no-daemon
 
 #removed sudo
 #sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
