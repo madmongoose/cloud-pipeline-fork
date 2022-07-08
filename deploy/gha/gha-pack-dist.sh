@@ -60,8 +60,8 @@ ls -a pipe-cli/dist/
 ls -a pipe-cli/dist/dist-file/
 ls -a pipe-cli/dist/dist-folder/
 
-sudo ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
-                    -Pprofile=release \
-                    -x test \
-                    -Pfast \
-                    --no-daemon
+# sudo ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
+#                     -Pprofile=release \
+#                     -x test \
+#                     -Pfast \
+#                     --no-daemon
