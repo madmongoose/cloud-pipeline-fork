@@ -74,20 +74,18 @@ jobs:
     #   run: npm install
     # - run: npm install -g npm
     - run: pip install awscli==1.14.56 mkdocs
-    - run: | 
-        rm -rf api/src/main/resources/static/*
-        rm -rf build/install/dist/*
-        mkdir -p api/src/main/resources/static
-        mkdir test
-        aws s3 cp s3://cloud-pipeline-oss-test/temp/pipe-osx-full.6.tar.gz test
-        tar -zxf test/pipe-osx-full.6.tar.gz -C test
-        mv test/dist/dist-file/pipe-osx api/src/main/resources/static/pipe-osx
-        mv test/dist/dist-folder/pipe-osx.tar.gz api/src/main/resources/static/pipe-osx.tar.gz
-        _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
-        sudo mv pipe-cli/dist/dist-file/pipe api/src/main/resources/static/pipe-el6
-        sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
+    - run: rm -rf api/src/main/resources/static/*
+    - run: rm -rf build/install/dist/*
+    - run: mkdir -p api/src/main/resources/static
+    - run: mkdir test
+    - run: aws s3 cp s3://cloud-pipeline-oss-test/temp/pipe-osx-full.6.tar.gz test
+    - run: tar -zxf test/pipe-osx-full.6.tar.gz -C test
+    - run: mv test/dist/dist-file/pipe-osx api/src/main/resources/static/pipe-osx
+    - run: mv test/dist/dist-folder/pipe-osx.tar.gz api/src/main/resources/static/pipe-osx.tar.gz
+    - run: _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
+    - run: sudo mv pipe-cli/dist/dist-file/pipe api/src/main/resources/static/pipe-el6
+    - run: sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
 
-    
     - name: Build GRADLE1
       uses: gradle/gradle-build-action@v2
       with:
