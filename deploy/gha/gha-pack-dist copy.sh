@@ -38,7 +38,7 @@ rm -rf ${API_STATIC_PATH}/*
 rm -rf build/install/dist/*
 mkdir -p ${API_STATIC_PATH}
 
-_OSX_CLI_TAR_NAME=pipe-osx-full.6.tar.gz
+_OSX_CLI_TAR_NAME=pipe-osx-full.$GITHUB_RUN_NUMBER.tar.gz
 #_OSX_CLI_TAR_NAME=pipe-osx-full.48.tar.gz
 _OSX_CLI_PATH=$(mktemp -d)
 aws s3 cp s3://cloud-pipeline-oss-test/temp/${_OSX_CLI_TAR_NAME} ${_OSX_CLI_PATH}/
