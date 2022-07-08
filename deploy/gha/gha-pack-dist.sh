@@ -60,7 +60,8 @@ export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
                     -Pprofile=release \
                     -x test \
                     -Pfast \
-                    --no-daemon
+                    --no-daemon \
+                    --force
 
 #removed sudo
 #sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
