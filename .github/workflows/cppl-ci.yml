@@ -10,7 +10,7 @@ on:
     - 'develop'
     - 'release/**'
     paths-ignore:
-      - ".github/workflows/**"
+      #- ".github/workflows/**"
       - ".README.md"
       - ".gitignore"
       - "quick-launcher/**"
@@ -18,7 +18,7 @@ on:
     branches: 
       - '**'
     paths-ignore:
-      - ".github/workflows/**"
+      #- ".github/workflows/**"
       - ".README.md"
       - ".gitignore"
       - "quick-launcher/**"
