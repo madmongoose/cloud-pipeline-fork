@@ -50,7 +50,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 10
-    - run: npm install
+    #- run: npm install
     - name: Configure AWS Credentials
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
       uses: aws-actions/configure-aws-credentials@v1
