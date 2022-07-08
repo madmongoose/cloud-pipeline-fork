@@ -54,11 +54,11 @@ _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-c
 mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
 mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 
-./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
-                    -Pprofile=release \
-                    -x test \
-                    -Pfast \
-                    --no-daemon
+# ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
+#                     -Pprofile=release \
+#                     -x test \
+#                     -Pfast \
+#                     --no-daemon
 
 #removed sudo
 #sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
