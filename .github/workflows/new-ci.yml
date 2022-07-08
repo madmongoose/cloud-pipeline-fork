@@ -64,13 +64,17 @@ jobs:
     #- name: Install Dependencies
       #run: npm install
     #- run: npm install -g npm
-    - name: Install dependencies
-      run: pip install wheel
+    # - name: Install dependencies
+    #   run: pip install wheel
     - name: Buld for All
       shell: bash -l {0}
-      run: |
-          python -m pip install awscli==1.14.56 mkdocs
-          bash deploy/gha/gha-pack-dist.sh
+      run: |-
+        sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
+        sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
+        sudo -E bash -s <<EOF
+          python2 -m pip install awscli==1.14.56 mkdocs
+          bash deploy/appveyor/appveyor_pack_dist.sh
+        EOF
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
 #sudo -E bash -s <<EOF
