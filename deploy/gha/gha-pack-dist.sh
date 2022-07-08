@@ -21,17 +21,17 @@ sudo apt-get install python-dev  python-pip -y
 sudo apt-get install python3-dev python3-pip python3-venv python3-wheel -y
 pip3 install wheel
 
-echo `python -V`
-echo `pip -V`
+# echo `python -V`
+# echo `pip -V`
 #sudo -H python -m ensurepip
-pip install virtualenv
-python -m virtualenv venv
-source venv/bin/activate
-echo `pip -V`
-echo `python -V`
-python -m pip install wheel
-python -m pip install awscli==1.14.56 
-python -m pip install mkdocs
+# pip install virtualenv
+# python -m virtualenv venv
+# source venv/bin/activate
+# echo `pip -V`
+# echo `python -V`
+# python -m pip install wheel
+# python -m pip install awscli==1.14.56 
+# python -m pip install mkdocs
 
 API_STATIC_PATH=api/src/main/resources/static
 rm -rf ${API_STATIC_PATH}/*
