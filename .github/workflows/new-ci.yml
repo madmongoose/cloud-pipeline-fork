@@ -70,6 +70,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '2.7'
+    - run: echo `pip --version`
+    - run: echo `pip2 --version`
+    - run: echo `pip3 --version`
     - name: Buld for All
       shell: bash -l {0}
       run: |-
