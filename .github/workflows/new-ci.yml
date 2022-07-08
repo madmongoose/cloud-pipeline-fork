@@ -70,9 +70,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '2.7'
-    - name: Install Dependencies
-      run: npm install
-    - run: npm install -g npm
+    # - name: Install Dependencies
+    #   run: npm install
+    # - run: npm install -g npm
     - name: Buld for All
       shell: bash -l {0}
       run: |-
@@ -80,10 +80,10 @@ jobs:
           pip install awscli==1.14.56 mkdocs
           bash deploy/gha/gha-pack-dist.sh
         EOF
-    - name: Build GRADLE
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
+    # - name: Build GRADLE
+    #   uses: gradle/gradle-build-action@v2
+    #   with:
+    #     arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
 
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
