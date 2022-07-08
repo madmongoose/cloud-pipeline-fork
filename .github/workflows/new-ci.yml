@@ -84,20 +84,13 @@ jobs:
         mv test/dist/dist-file/pipe-osx api/src/main/resources/static/pipe-osx
         mv test/dist/dist-folder/pipe-osx.tar.gz api/src/main/resources/static/pipe-osx.tar.gz
         _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
-        mv pipe-cli/dist/dist-file/pipe api/src/main/resources/static/pipe-el6
-        mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
+        sudo mv pipe-cli/dist/dist-file/pipe api/src/main/resources/static/pipe-el6
+        sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
 
-    
     - name: Build GRADLE1
       uses: gradle/gradle-build-action@v2
       with:
         arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon   
-
-
-    - name: Build GRADLE2
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
 
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
