@@ -93,6 +93,22 @@ jobs:
       image: lifescience/cloud-pipeline:python2.7-centos6
       options: --user root
     steps:
+      
+      - uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: "temurin" # See 'Supported distributions' for available options
+          java-version: "8"
+          cache: "gradle"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 10
+      - run: npm install
+      - name: Python Setup Action
+        uses: actions/setup-python@v4
+        with:
+          python-version: '2.7'
       - name: Build GRADLE1
         uses: gradle/gradle-build-action@v2
         with:
