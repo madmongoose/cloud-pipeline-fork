@@ -87,7 +87,7 @@ jobs:
     - run: sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
 
     
-    - run: sudo chown -R $USER dist/
+    - run: sudo chown -R $USER test/
     - name: Build GRADLE1
       uses: gradle/gradle-build-action@v2
       with:
