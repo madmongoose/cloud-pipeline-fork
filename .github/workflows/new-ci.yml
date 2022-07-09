@@ -85,20 +85,15 @@ jobs:
     - run: _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
     - run: sudo mv pipe-cli/dist/dist-file/pipe api/src/main/resources/static/pipe-el6
     - run: sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz api/src/main/resources/static/pipe-el6.tar.gz
-
-    
-    - run: sudo chown -R $USER test/
-    - name: Build GRADLE1
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon   
-
-#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
-#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
-#sudo -E bash -s <<EOF
-#python2 -m pip install awscli==1.14.56 mkdocs
-#curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7 
-#python get-pip.py
-#pip --version
-#sudo apt install python2
-#python -V
+  
+  build3:  
+    runs-on: ubuntu-latest
+    needs: build2
+    container:
+      image: lifescience/cloud-pipeline:python2.7-centos6
+      options: --user root
+    steps:
+      - name: Build GRADLE1
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon --info
