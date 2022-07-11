@@ -184,9 +184,9 @@ task distZip(type: Zip, dependsOn: installDist) {
     version = project.version
     group = "distribution"
     archiveName "cloud-pipeline.${version}.zip"
-    //destinationDir(file("$project.buildDir/install/dist"))
-    //from("$project.buildDir/install/bin/") {
-    //    into "bin/"
+    destinationDir(file("$project.buildDir/install/dist"))
+    from("$project.buildDir/install/bin/") {
+        into "bin/"
     }
     include "**/**"
 }
