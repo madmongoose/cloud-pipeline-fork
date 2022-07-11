@@ -88,7 +88,7 @@ jobs:
 
     - run: sudo mkdir PipelineCLI-0.17.0.$GITHUB_SHA
     - run: echo `ls -l`
-    - run: ./gradlew distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
+    - run: sudo ./gradlew distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
     - run: echo `ls -l`
 
 #sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
