@@ -74,6 +74,8 @@ jobs:
     #   run: npm install
     # - run: npm install -g npm
     - run: pip install awscli==1.14.56 mkdocs
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
     - name: gha-pack-dist.sh
       run: deploy/gha/gha-pack-dist.sh
       shell: bash
