@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+#set -e
 
 # sudo apt-get install gcc libpq-dev -y
 # sudo apt-get install python-dev  python-pip -y
