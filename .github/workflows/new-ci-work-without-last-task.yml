@@ -74,7 +74,7 @@ jobs:
     #   run: npm install
     # - run: npm install -g npm
     - run: pip install awscli==1.14.56 mkdocs
-    - run: sudo deploy/gha/gha-pack-dist.sh
+    - run: sudo ./deploy/gha/gha-pack-dist.sh
     # - name: Build GRADLE
     #   uses: gradle/gradle-build-action@v2
     #   with:
