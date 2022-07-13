@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+sudo -i
 
 set -e
 
@@ -54,8 +55,8 @@ sudo mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz ${API_STATIC_PATH}/pipe-
 #sudo ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA --info -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
-mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
-mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
+sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
+sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 
 #npm install -g npm@8
 
