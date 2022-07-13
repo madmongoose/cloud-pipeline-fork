@@ -77,8 +77,7 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     - name: gha-pack-dist.sh
-      run: deploy/gha/gha-pack-dist.sh
-      shell: bash
+      run: sudo bash deploy/gha/gha-pack-dist.sh
     # - name: Build GRADLE
     #   uses: gradle/gradle-build-action@v2
     #   with:
