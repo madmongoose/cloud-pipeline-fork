@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#set -e
+set -e
 
 npm config set user 0
 npm config set unsafe-perm true
