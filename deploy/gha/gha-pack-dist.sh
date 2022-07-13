@@ -15,7 +15,7 @@
 # limitations under the License.
 sudo -i
 
-set -e
+#set -e
 
 npm config set user 0
 npm config set unsafe-perm true
@@ -43,42 +43,22 @@ rm -rf build/install/dist/*
 mkdir -p ${API_STATIC_PATH}
 
 _OSX_CLI_TAR_NAME=pipe-osx-full.6.tar.gz
-#_OSX_CLI_TAR_NAME=pipe-osx-full.48.tar.gz
 _OSX_CLI_PATH=$(mktemp -d)
 aws s3 cp s3://cloud-pipeline-oss-test/temp/${_OSX_CLI_TAR_NAME} ${_OSX_CLI_PATH}/
 tar -zxf $_OSX_CLI_PATH/$_OSX_CLI_TAR_NAME -C $_OSX_CLI_PATH
 
-sudo mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx ${API_STATIC_PATH}/pipe-osx
-sudo mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz ${API_STATIC_PATH}/pipe-osx.tar.gz
+mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx ${API_STATIC_PATH}/pipe-osx
+mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz ${API_STATIC_PATH}/pipe-osx.tar.gz
 
 #_BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" 
 #sudo ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA --info -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 _BUILD_DOCKER_IMAGE="lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
-sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
-sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
-
-#npm install -g npm@8
+mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
+mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 
 ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
                     -Pprofile=release \
                     -x test \
                     -Pfast \
                     --no-daemon
-
-#removed sudo
-#sudo mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
-#sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
-#mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
-#mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
-
-ls -a pipe-cli/
-ls -a pipe-cli/dist/
-ls -a pipe-cli/dist/dist-file/
-ls -a pipe-cli/dist/dist-folder/
-
-# sudo ./gradlew distTar   -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA \
-#                     -Pprofile=release \
-#                     -x test \
-#                     -Pfast \
-#                     --no-daemon
