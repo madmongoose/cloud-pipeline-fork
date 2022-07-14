@@ -66,10 +66,10 @@ jobs:
     #- run: npm install -g npm
     # - name: Install dependencies
     #   run: pip install wheel
-    - name: Python Setup Action
-      uses: actions/setup-python@v4
-      with:
-        python-version: '2.7.18'
+    # - name: Python Setup Action
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: '2.7'
     # - name: Install Dependencies
     #   run: npm install
     # - run: npm install -g npm
@@ -77,7 +77,10 @@ jobs:
     # - name: Make gradlew executable
     #   run: chmod +x ./gradlew
     - name: mybuild-1604
-      run: | 
+      run: |
+        sudo apt install -y python2
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+        python2 get-pip.py
         npm config set user 0
         npm config set unsafe-perm true
         pip install awscli==1.14.56 mkdocs
