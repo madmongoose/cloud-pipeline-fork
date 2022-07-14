@@ -1,0 +1,34 @@
+sudo apt update -y && sudo apt install -y openjdk-8-jdk git curl python-minimal
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+nvm install 10.24.1
+
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+
+python2 get-pip.py
+
+pip install awscli==1.14.56 mkdocs
+
+chmod +x mybuild.sh 
+
+git clone https://github.com/madmongoose/cloud-pipeline-fork.git && cd cloud-pipeline-fork
+
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt update
+apt-cache policy docker-ce
+sudo apt install docker-ce
+sudo usermod -aG docker ${USER}
+su - ${USER}
+
+npm config set user 0
+npm config set unsafe-perm true
+
+sudo bash mybuild.sh 
+
+
+
