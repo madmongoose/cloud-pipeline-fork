@@ -83,7 +83,7 @@ jobs:
         python2 get-pip.py
         npm config set user 0
         npm config set unsafe-perm true
-        pip install mkdocs
+        python2 -m pip install awscli==1.14.56 mkdocs
         sudo bash ./mybuild-1604.sh
         #sudo bash deploy/gha/gha-pack-dist.sh
     # - name: Build GRADLE
