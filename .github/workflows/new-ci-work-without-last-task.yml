@@ -78,14 +78,15 @@ jobs:
     #   run: chmod +x ./gradlew
     - name: mybuild-1604
       run: |
-        sudo apt install -y python2
+        sudo -E bash -s <<EOF
+        apt install -y python2
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
         python2 get-pip.py
         npm config set user 0
         npm config set unsafe-perm true
         python2 -m pip install awscli==1.14.56 mkdocs
-        sudo bash ./mybuild-1604.sh
-        #sudo bash deploy/gha/gha-pack-dist.sh
+        ./mybuild-1604.sh
+        EOF
     # - name: Build GRADLE
     #   uses: gradle/gradle-build-action@v2
     #   with:
