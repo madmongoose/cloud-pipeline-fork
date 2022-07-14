@@ -69,7 +69,7 @@ jobs:
     - name: Python Setup Action
       uses: actions/setup-python@v4
       with:
-        python-version: '2.7'
+        python-version: '2.7.18'
     # - name: Install Dependencies
     #   run: npm install
     # - run: npm install -g npm
