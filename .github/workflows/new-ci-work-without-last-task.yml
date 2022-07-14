@@ -30,7 +30,7 @@ jobs:
       
   build2:
     
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     #runs-on: ${{ matrix.os }}
     #needs: build1
     #strategy:
@@ -73,11 +73,16 @@ jobs:
     # - name: Install Dependencies
     #   run: npm install
     # - run: npm install -g npm
-    - run: pip install awscli==1.14.56 mkdocs
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-    - name: gha-pack-dist.sh
-      run: sudo bash deploy/gha/gha-pack-dist.sh
+    #- run: pip2 install awscli==1.14.56 mkdocs
+    # - name: Make gradlew executable
+    #   run: chmod +x ./gradlew
+    - name: mybuild-1604
+      run: | 
+        npm config set user 0
+        npm config set unsafe-perm true
+        pip install awscli==1.14.56 mkdocs
+        sudo bash ./mybuild-1604.sh
+        #sudo bash deploy/gha/gha-pack-dist.sh
     # - name: Build GRADLE
     #   uses: gradle/gradle-build-action@v2
     #   with:
