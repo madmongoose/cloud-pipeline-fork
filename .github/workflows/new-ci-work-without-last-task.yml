@@ -30,7 +30,7 @@ jobs:
       
   build2:
     
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     #runs-on: ${{ matrix.os }}
     #needs: build1
     #strategy:
