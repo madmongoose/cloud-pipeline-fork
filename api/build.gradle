@@ -1,5 +1,10 @@
 buildscript {
-    repositories { mavenCentral() }
+    repositories { 
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    google()
+    }
 }
 
 plugins {
