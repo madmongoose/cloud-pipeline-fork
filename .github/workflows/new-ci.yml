@@ -78,7 +78,7 @@ jobs:
     #   run: chmod +x ./gradlew
     - name: mybuild-1604
       run: |
-        sudo -E bash -s <<EOF
+        sudo bash <<EOF
         apt install -y python2
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
         python2 get-pip.py
