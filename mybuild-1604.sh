@@ -16,10 +16,10 @@
 
 set -e
 
-export APPVEYOR_BUILD_NUMBER=6
-export APPVEYOR_REPO_COMMIT=12345678901234567890
-export APPVEYOR_REPO_NAME="madmongoose/cloud-pipeline-fork"
-export APPVEYOR_REPO_BRANCH="develop"
+APPVEYOR_BUILD_NUMBER=6
+APPVEYOR_REPO_COMMIT=12345678901234567890
+APPVEYOR_REPO_NAME="madmongoose/cloud-pipeline-fork"
+APPVEYOR_REPO_BRANCH="develop"
 
 API_STATIC_PATH=api/src/main/resources/static
 rm -rf ${API_STATIC_PATH}/*
@@ -35,7 +35,6 @@ aws s3 cp s3://cloud-pipeline-oss-test/temp/${_OSX_CLI_TAR_NAME} ${_OSX_CLI_PATH
 tar -zxf $_OSX_CLI_PATH/$_OSX_CLI_TAR_NAME -C $_OSX_CLI_PATH
 
 echo "##################################################################################################################################step2"
-
 
 mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx ${API_STATIC_PATH}/pipe-osx
 mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz ${API_STATIC_PATH}/pipe-osx.tar.gz
