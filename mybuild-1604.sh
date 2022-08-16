@@ -58,8 +58,7 @@ ls ${API_STATIC_PATH}/
                     -x pipe-cli:build \
                     -x pipe-cli:buildLinux \
                     -x pipe-cli:buildWin \
-                    -x fs-browser:build \
-                    -x cloud-pipeline-webdav-client:buildLinux
+                    -x fs-browser:build
 
 echo "##################################################################################################################################step5"
 ls ${API_STATIC_PATH}/
