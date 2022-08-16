@@ -54,11 +54,12 @@ ls ${API_STATIC_PATH}/
                     -x test \
                     -Pfast \
                     --no-daemon \
-                    -x client:buildUI \
-                    -x pipe-cli:build \
-                    -x pipe-cli:buildLinux
+                    -x api:bootRepackage \
+                    -x data-sharing-service:api
 
 echo "##################################################################################################################################step5"
+#-x api:bootRepackage
+#-x data-sharing-service:api
 ls ${API_STATIC_PATH}/
 
 # if [ "$APPVEYOR_REPO_NAME" == "madmongoose/cloud-pipeline-fork" ]; then
