@@ -68,12 +68,12 @@ echo "##########################################################################
 #-x data-sharing-service:api
 ls ${API_STATIC_PATH}/
 
-# if [ "$APPVEYOR_REPO_NAME" == "madmongoose/cloud-pipeline-fork" ]; then
-#     DIST_TGZ_NAME=$(echo build/install/dist/cloud-pipeline*)
+if [ "$APPVEYOR_REPO_NAME" == "madmongoose/cloud-pipeline-fork" ]; then
+    DIST_TGZ_NAME=$(echo build/install/dist/cloud-pipeline*)
 
-#     # Publish repackaged distribution tgz to S3 into builds/ prefix
-#     # Only if it is one of the allowed branches and it is a push (not PR)
-#     if [ "$APPVEYOR_REPO_BRANCH" == "develop" ] || [ "$APPVEYOR_REPO_BRANCH" == "master" ] || [[ "$APPVEYOR_REPO_BRANCH" == "release/"* ]] || [[ "$APPVEYOR_REPO_BRANCH" == "stage/"* ]]; then
-#             aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/${APPVEYOR_REPO_BRANCH}/
-#     fi
-# fi
+    # Publish repackaged distribution tgz to S3 into builds/ prefix
+    # Only if it is one of the allowed branches and it is a push (not PR)
+    if [ "$APPVEYOR_REPO_BRANCH" == "develop" ] || [ "$APPVEYOR_REPO_BRANCH" == "master" ] || [[ "$APPVEYOR_REPO_BRANCH" == "release/"* ]] || [[ "$APPVEYOR_REPO_BRANCH" == "stage/"* ]]; then
+            aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/${APPVEYOR_REPO_BRANCH}/
+    fi
+fi
