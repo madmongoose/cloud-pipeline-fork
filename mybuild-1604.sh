@@ -54,9 +54,7 @@ ls ${API_STATIC_PATH}/
                     -x test \
                     -Pfast \
                     --no-daemon \
-                    -x client:buildUI \
-                    -x pipe-cli:build \
-                    -x pipe-cli:buildWin
+                    -x api
 
 echo "##################################################################################################################################step5"
 #-x api:bootRepackage
