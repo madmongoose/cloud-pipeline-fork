@@ -54,7 +54,9 @@ ls ${API_STATIC_PATH}/
                     -x test \
                     -Pfast \
                     --no-daemon \
-                    -x api:bootRepackage
+                    -x client:buildUI \
+                    -x pipe-cli:build \
+                    -x pipe-cli:buildLinux
 
 echo "##################################################################################################################################step5"
 ls ${API_STATIC_PATH}/
