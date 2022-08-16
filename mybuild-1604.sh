@@ -55,13 +55,13 @@ echo "##########################################################################
 
 ./gradlew -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
-# ./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
-#                     -Pprofile=release \
-#                     -x test \
-#                     -Pfast \
-#                     --no-daemon \
-#                     -x pipe-cli:buildLinux \
-#                     -x pipe-cli:buildWin
+./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
+                    -Pprofile=release \
+                    -x test \
+                    -Pfast \
+                    --no-daemon \
+                    -x pipe-cli:buildLinux \
+                    -x pipe-cli:buildWin
 
 echo "##################################################################################################################################step6"
 #-x api:bootRepackage
