@@ -56,7 +56,7 @@ ls ${API_STATIC_PATH}/
                     --no-daemon \
                     -x client:buildUI \
                     -x pipe-cli:build \
-                    -x pipe-cli:buildWin \
+                    -x pipe-cli:buildWin
 
 echo "##################################################################################################################################step5"
 #-x api:bootRepackage
