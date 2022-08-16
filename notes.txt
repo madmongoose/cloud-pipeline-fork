@@ -1,0 +1,14 @@
+ls ${API_STATIC_PATH}/
+echo $GRADLE_HOME
+#rm -rf $GRADLE_HOME/caches/build-cache-*
+#./gradlew cleanBuildCache
+
+./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
+                    -Pprofile=release \
+                    -x test \
+                    -Pfast \
+                    --no-daemon \
+                    --no-build-cache \
+                    --stacktrace
+#-Dorg.gradle.internal.repository.initial.backoff=500 -Dorg.gradle.internal.http.socketTimeout=1200000 -Dorg.gradle.internal.http.connectionTimeout=1200000                   
+#-Dorg.gradle.internal.http.socketTimeout=1200000 -Dorg.gradle.internal.http.connectionTimeout=1200000 --max-workers=1
