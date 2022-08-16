@@ -49,15 +49,21 @@ mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 echo "##################################################################################################################################step4"
 ls ${API_STATIC_PATH}/
 
-./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
-                    -Pprofile=release \
-                    -x test \
-                    -Pfast \
-                    --no-daemon \
-                    -x pipe-cli:buildLinux \
-                    -x pipe-cli:buildWin
+./gradlew -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} -Pprofile=release pipe-cli:buildLinux --no-daemon
 
 echo "##################################################################################################################################step5"
+
+#./gradlew -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} -Pprofile=release pipe-cli:buildWin --no-daemon
+
+# ./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
+#                     -Pprofile=release \
+#                     -x test \
+#                     -Pfast \
+#                     --no-daemon \
+#                     -x pipe-cli:buildLinux \
+#                     -x pipe-cli:buildWin
+
+echo "##################################################################################################################################step6"
 #-x api:bootRepackage
 #-x data-sharing-service:api
 ls ${API_STATIC_PATH}/
