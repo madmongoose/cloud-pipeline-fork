@@ -46,25 +46,21 @@ _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-c
 mv pipe-cli/dist/dist-file/pipe ${API_STATIC_PATH}/pipe-el6
 mv pipe-cli/dist/dist-folder/pipe.tar.gz ${API_STATIC_PATH}/pipe-el6.tar.gz
 
-# Run Java code checks
-./gradlew api:checkstyleMain \
-          api:pmdMain \
-          api:checkstyleTest \
-          api:pmdTest --no-daemon
+echo "##################################################################################################################################step4"
+ls ${API_STATIC_PATH}/
 
-# Create distribution tgz
 ./gradlew distTar   -PbuildNumber=${APPVEYOR_BUILD_NUMBER}.${APPVEYOR_REPO_COMMIT} \
                     -Pprofile=release \
                     -x test \
+                    -Pfast \
+                    --no-daemon \
                     -x client:buildUI \
                     -x pipe-cli:build \
                     -x pipe-cli:buildLinux \
                     -x pipe-cli:buildWin \
                     -x fs-browser:build \
                     -x cloud-pipeline-webdav-client:buildLinux \
-                    -x cloud-pipeline-webdav-client:buildWin \
-                    -Pfast \
-                    --no-daemon
+                    -x cloud-pipeline-webdav-client:buildWin
 
 echo "##################################################################################################################################step5"
 ls ${API_STATIC_PATH}/
