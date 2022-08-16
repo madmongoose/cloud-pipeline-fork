@@ -54,11 +54,7 @@ ls ${API_STATIC_PATH}/
                     -x test \
                     -Pfast \
                     --no-daemon \
-                    -x client:buildUI \
-                    -x pipe-cli:build \
-                    -x pipe-cli:buildLinux \
-                    -x pipe-cli:buildWin \
-                    -x fs-browser:build
+                    -x client:buildUI
 
 echo "##################################################################################################################################step5"
 ls ${API_STATIC_PATH}/
