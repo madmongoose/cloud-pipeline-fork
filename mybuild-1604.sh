@@ -54,7 +54,10 @@ ls ${API_STATIC_PATH}/
                     -x test \
                     -Pfast \
                     --no-daemon \
-                    -x api:compileJava
+                    -x client:buildUI \
+                    -x pipe-cli:build \
+                    -x pipe-cli:buildLinux \
+                    -x pipe-cli:buildWin
 
 echo "##################################################################################################################################step5"
 ls ${API_STATIC_PATH}/
