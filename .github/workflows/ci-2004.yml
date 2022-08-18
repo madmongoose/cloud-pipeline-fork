@@ -76,7 +76,7 @@ jobs:
     #- run: pip2 install awscli==1.14.56 mkdocs
     # - name: Make gradlew executable
     #   run: chmod +x ./gradlew
-    - run: cat /etc/os-release   
+    - run: uname -a
     # - name: mybuild-2004
     #   run: |
     #     sudo -E bash -s <<EOF
