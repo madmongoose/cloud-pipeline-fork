@@ -106,4 +106,3 @@ jobs:
 #python get-pip.py
 #pip --version
 #sudo apt install python2
-#python -V
