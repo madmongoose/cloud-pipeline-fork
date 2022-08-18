@@ -40,17 +40,17 @@ jobs:
         #node: [10]
         #java: [8]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup Java JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         distribution: "temurin" # See 'Supported distributions' for available options
         java-version: "8"
         cache: "gradle"
-    # - uses: actions/setup-node@v3
-    #   with:
-    #     node-version: 10
-    #- run: npm install
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 10
+    - run: npm install
     - name: Configure AWS Credentials
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
       uses: aws-actions/configure-aws-credentials@v1
