@@ -43,7 +43,7 @@ mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
                     -x pipe-cli:buildLinux \
                     -x pipe-cli:buildWin
 
-if [ "$APPVEYOR_REPO_NAME" == "madmongoose/cloud-pipeline-fork" ]; then
+if [ "$GITHUB_REF_NAME" == "madmongoose/cloud-pipeline-fork" ]; then
     DIST_TGZ_NAME=$(echo build/install/dist/cloud-pipeline*)
 
     # Publish repackaged distribution tgz to S3 into builds/ prefix
