@@ -16,8 +16,6 @@
 
 set -e
 
-GITHUB_RUN_NUMBER=6
-
 API_STATIC_PATH=api/src/main/resources/static
 rm -rf $API_STATIC_PATH/*
 rm -rf build/install/dist/*
