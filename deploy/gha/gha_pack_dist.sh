@@ -26,9 +26,9 @@ _OSX_CLI_PATH=$(mktemp -d)
 #aws s3 cp s3://cloud-pipeline-oss-test/temp/$_OSX_CLI_TAR_NAME $_OSX_CLI_PATH/
 mv $_OSX_CLI_TAR_NAME $_OSX_CLI_PATH/
 ls $_OSX_CLI_PATH
-ls "echo1"
+echo "step1"
 tar -zxf $_OSX_CLI_PATH/$_OSX_CLI_TAR_NAME -C $_OSX_CLI_PATH
-ls "echo2"
+echo "step2"
 ls $_OSX_CLI_PATH
 
 mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
