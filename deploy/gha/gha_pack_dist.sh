@@ -25,14 +25,10 @@ _OSX_CLI_TAR_NAME=pipe-osx-full.$GITHUB_RUN_NUMBER.tar.gz
 _OSX_CLI_PATH=$(mktemp -d)
 #aws s3 cp s3://cloud-pipeline-oss-test/temp/$_OSX_CLI_TAR_NAME $_OSX_CLI_PATH/
 mv $_OSX_CLI_TAR_NAME $_OSX_CLI_PATH/
-ls $_OSX_CLI_PATH
-echo "step1"
 tar -zxf $_OSX_CLI_PATH/$_OSX_CLI_TAR_NAME -C $_OSX_CLI_PATH
-echo "step2"
-ls $_OSX_CLI_PATH
 
-mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
-mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz $API_STATIC_PATH/pipe-osx.tar.gz
+mv $_OSX_CLI_PATH/pipe-cli/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
+mv $_OSX_CLI_PATH/pipe-cli/dist/dist-folder/pipe-osx.tar.gz $API_STATIC_PATH/pipe-osx.tar.gz
 
 _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=$GITHUB_RUN_NUMBER.$GITHUB_SHA -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
