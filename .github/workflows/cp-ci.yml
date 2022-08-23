@@ -4,7 +4,7 @@
 # 2022
 #---------------------------------------------------------------------
 
-name: cp-ci
+name: gha-cp-ci
 
 # Controls when the workflow will run
 on:
