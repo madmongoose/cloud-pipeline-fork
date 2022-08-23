@@ -70,52 +70,58 @@ jobs:
     - name: Upload a build artifact on the GitHub Actions job page
       uses: actions/upload-artifact@v3
       with:
-        name: pipe-osx-full.${{ github.run_number }}
+        name: pipe-osx-full.${{ github.run_number }}.tar.gz
         path: pipe-osx-full.${{ github.run_number }}.tar.gz
         retention-days: 7
 
     # - name: Buld only for macOS
     #   run: bash deploy/gha/gha_build_macos.sh    
   
-  # build2:
-  #   needs: build1
+  build2:
+    needs: build1
     
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - uses: actions/checkout@v3
+    steps:
+    - uses: actions/checkout@v3
 
-  #   - name: Setup Java JDK
-  #     uses: actions/setup-java@v3
-  #     with:
-  #       distribution: "temurin" # See 'Supported distributions' for available options
-  #       java-version: "8"
-  #       cache: "gradle"
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin" # See 'Supported distributions' for available options
+        java-version: "8"
+        cache: "gradle"
 
-  #   - uses: actions/setup-node@v3
-  #     with:
-  #       node-version: 10
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 10
     
-  #   - name: Configure AWS Credentials
-  #     #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-  #     uses: aws-actions/configure-aws-credentials@v1
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Configure AWS Credentials
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: pipe-osx-full.${{ github.run_number }}.tar.gz
+    - name: Display structure of downloaded files
+      run: ls -R
 
-  #   - name: mybuild-2004
-  #     run: |
-  #       sudo -E bash -s <<EOF
-  #       apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
-  #       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
-  #       python2 get-pip.py
-  #       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-  #       export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-  #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-  #       nvm install 10.24.1
-  #       npm config set user 0
-  #       npm config set unsafe-perm true
-  #       python2 -m pip install awscli==1.14.56 mkdocs
-  #       deploy/gha/gha_pack_dist.sh
-  #       EOF
+    - name: mybuild-2004
+      run: |
+        sudo -E bash -s <<EOF
+        apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+        python2 get-pip.py
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm install 10.24.1
+        npm config set user 0
+        npm config set unsafe-perm true
+        python2 -m pip install awscli==1.14.56 mkdocs
+        deploy/gha/gha_pack_dist.sh
+        EOF
