@@ -65,11 +65,13 @@ jobs:
       uses: gradle/gradle-build-action@v2    
     - run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildMac --no-daemon -x :pipe-cli:test
 
+    - run: tar -zcf pipe-osx-full.${{ github.run_number }}.tar.gz pipe-cli/dist
+
     - name: Upload a build artifact on the GitHub Actions job page
       uses: actions/upload-artifact@v3
       with:
-        name: pipe-osx-full.${{ github.run_number }}.tar.gz
-        path: pipe-cli/dist
+        name: pipe-osx-full.${{ github.run_number }}
+        path: pipe-osx-full.${{ github.run_number }}.tar.gz
         retention-days: 7
 
     # - name: Buld only for macOS
