@@ -1,7 +1,10 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+#---------------------------------------------------------------------
+# GitHub Action Workflow for Cloud-Pipeline
+# Version 1.0
+# 2022
+#---------------------------------------------------------------------
 
-name: ci-2004
+name: cp-ci
 
 # Controls when the workflow will run
 on:
@@ -29,10 +32,9 @@ on:
 jobs:
 
   build1:
-
     runs-on: macos-latest
-
     steps:
+
     - uses: actions/checkout@v3
 
     - name: Setup Java JDK
@@ -46,8 +48,6 @@ jobs:
       with:
         node-version: 10
 
-    #- run: npm install
-
     - name: Configure AWS Credentials
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
       uses: aws-actions/configure-aws-credentials@v1
@@ -57,9 +57,7 @@ jobs:
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
     - name: Buld only for macOS
-      #id: test-macos
-      #if: matrix.os == 'macos-latest'
-      run: bash deploy/gha/gha-build-macos.sh    
+      run: bash deploy/gha/gha_build_macos.sh    
   
   build2:
     needs: build1
@@ -79,7 +77,6 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 10
-    #- run: npm install
     
     - name: Configure AWS Credentials
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
@@ -88,24 +85,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    #- name: Set the correct Node version using nvm
-      #shell: bash -l {0} 
-      #run: nvm install
-    #- name: Install Dependencies
-      #run: npm install
-    #- run: npm install -g npm
-    # - name: Install dependencies
-    #   run: pip install wheel
-    # - name: Python Setup Action
-    #   uses: actions/setup-python@v4
-    #   with:
-    #     python-version: '2.7'
-    # - name: Install Dependencies
-    #   run: npm install
-    # - run: npm install -g npm
-    #- run: pip2 install awscli==1.14.56 mkdocs
-    # - name: Make gradlew executable
-    #   run: chmod +x ./gradlew
 
     - name: mybuild-2004
       run: |
@@ -120,19 +99,5 @@ jobs:
         npm config set user 0
         npm config set unsafe-perm true
         python2 -m pip install awscli==1.14.56 mkdocs
-        ./mybuild-2004.sh
+        deploy/gha/gha_pack_dist.sh
         EOF
-
-    # - name: Build GRADLE
-    #   uses: gradle/gradle-build-action@v2
-    #   with:
-    #     arguments: distTar -PbuildNumber=${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon
-
-#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
-#sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
-#sudo -E bash -s <<EOF
-#python2 -m pip install awscli==1.14.56 mkdocs
-#curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7 
-#python get-pip.py
-#pip --version
-#sudo apt install python2
