@@ -113,6 +113,7 @@ jobs:
       run: ls -R
 
     - run: |
+        mkdir $_OSX_CLI_PATH
         rm -rf $API_STATIC_PATH/*
         rm -rf build/install/dist/*
         mkdir -p $API_STATIC_PATH
