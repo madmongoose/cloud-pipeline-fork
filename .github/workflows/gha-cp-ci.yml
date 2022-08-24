@@ -1,6 +1,6 @@
 #---------------------------------------------------------------------
 # GitHub Action Workflow for Cloud-Pipeline
-# Version 1.0
+# Version 1.1
 # 2022
 #---------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  build1:
+  build_macos:
     runs-on: macos-latest
     steps:
 
@@ -72,13 +72,14 @@ jobs:
       with:
         name: pipe-osx-full.${{ github.run_number }}.tar.gz
         path: pipe-osx-full.${{ github.run_number }}.tar.gz
-        retention-days: 7
-
-    # - name: Buld only for macOS
-    #   run: bash deploy/gha/gha_build_macos.sh    
+        retention-days: 7 
   
-  build2:
-    needs: build1
+  pack_dist:
+    needs: build_macos
+    env:
+      API_STATIC_PATH: api/src/main/resources/static
+      _OSX_CLI_TAR_NAME: pipe-osx-full.${{ github.run_number }}.tar.gz
+      _OSX_CLI_PATH: $(mktemp -d)
     
     runs-on: ubuntu-latest
 
@@ -108,9 +109,18 @@ jobs:
       with:
         name: pipe-osx-full.${{ github.run_number }}.tar.gz
     - name: Display structure of downloaded files
-      run: ls -R
+      #run: ls -R
 
-    - name: mybuild-2004
+    - run: |
+        rm -rf $API_STATIC_PATH/*
+        rm -rf build/install/dist/*
+        mkdir -p $API_STATIC_PATH
+        mv $_OSX_CLI_TAR_NAME $_OSX_CLI_PATH/
+        tar -zxf $_OSX_CLI_PATH/$_OSX_CLI_TAR_NAME -C $_OSX_CLI_PATH
+        mv $_OSX_CLI_PATH/pipe-cli/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
+        mv $_OSX_CLI_PATH/pipe-cli/dist/dist-folder/pipe-osx.tar.gz $API_STATIC_PATH/pipe-osx.tar.gz
+    
+    - name: Setup Environment
       run: |
         sudo -E bash -s <<EOF
         apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
@@ -123,5 +133,25 @@ jobs:
         npm config set user 0
         npm config set unsafe-perm true
         python2 -m pip install awscli==1.14.56 mkdocs
+        #deploy/gha/gha_pack_dist.sh
+        EOF
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
+
+    - run: | 
+        mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
+        mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
+
+    - run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
+
+    - run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+
+    - name: Upload Artifact
+      run: |
+        sudo -E bash -s <<EOF
         deploy/gha/gha_pack_dist.sh
         EOF
+    
+
