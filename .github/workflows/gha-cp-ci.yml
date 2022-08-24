@@ -150,7 +150,7 @@ jobs:
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
     - name: distTar
-      run: sudo ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+      run: -E sudo bash -s ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
 
     - name: Upload Artifact
       run: |
