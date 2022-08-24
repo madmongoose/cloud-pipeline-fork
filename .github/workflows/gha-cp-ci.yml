@@ -109,7 +109,7 @@ jobs:
       with:
         name: pipe-osx-full.${{ github.run_number }}.tar.gz
     - name: Display structure of downloaded files
-      #run: ls -R
+      run: ls -R
 
     - run: |
         rm -rf $API_STATIC_PATH/*
@@ -144,9 +144,11 @@ jobs:
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
 
-    - run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
+    - name: pipe-cli:buildWin
+      run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
-    - run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+    - name: distTar
+      run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
 
     - name: Upload Artifact
       run: |
