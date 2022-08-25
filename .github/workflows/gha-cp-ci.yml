@@ -95,7 +95,17 @@ jobs:
         java-version: "8"
         cache: "gradle"
 
-    - uses: actions/setup-node@v3
+    # - name: Setup Gradle
+    #   uses: gradle/gradle-build-action@v2
+
+    - name: Setup Python 2.7 
+      uses: actions/setup-python@v4
+      with:
+        python-version: '2.7'
+    - run: python2 -m pip install mkdocs
+
+    - name: Setup Node.js 10 
+      uses: actions/setup-node@v3
       with:
         node-version: 10
     
@@ -113,7 +123,8 @@ jobs:
 #    - name: Display structure of downloaded files
 #      run: ls -R
 
-    - run: |
+    - name: File layout 1
+      run: |
         mkdir $_OSX_CLI_PATH
         rm -rf $API_STATIC_PATH/*
         rm -rf build/install/dist/*
@@ -126,47 +137,26 @@ jobs:
         mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
         mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz $API_STATIC_PATH/pipe-osx.tar.gz
 
-    # - name: Setup Gradle
-    #   uses: gradle/gradle-build-action@v2
     - name: Gradle pipe-cli:buildLinux
       run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
     - name: Fixing permissions
       run: sudo chown -R $USER:$USER ${{ github.workspace }}
 
-    - run: | 
+    - name: File layout 2
+      run: | 
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
 
     - name: Gradle pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
-    - name: Python Setup Action
-      uses: actions/setup-python@v4
-      with:
-        python-version: '2.7'
-    - run: python2 -m pip install awscli==1.14.56 mkdocs
-
-    # - name: Setup Environment
-    #   run: |
-    #     bash -s <<EOF
-    #     apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
-    #     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
-    #     python2 get-pip.py
-    #     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-    #     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    #     nvm install 10.24.1
-    #     npm config set user 0
-    #     npm config set unsafe-perm true
-    #     python2 -m pip install awscli==1.14.56 mkdocs
-    #     EOF
-
     - name: Gradle distTar
       run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
     
-    - name: Upload Artifact
-      run: |
-        sudo -E bash -s <<EOF
-        deploy/gha/gha_pack_dist.sh
-        EOF
+    - name: Copying a build artifact to AWS
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
+      shell: bash
+      env:
+        DIST_TGZ_NAME: $(echo build/install/dist/cloud-pipeline*)
