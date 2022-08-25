@@ -149,10 +149,10 @@ jobs:
     - run: | 
         sudo chmod -R 777 $_OSX_CLI_PATH/
         sudo chmod -R 777 $API_STATIC_PATH/
-        sudo chmod -R 777 pipe-cli/dist/
+        #sudo chmod -R 777 pipe-cli/dist/
         sudo chown -R $(whoami) $_OSX_CLI_PATH/
         sudo chown -R $(whoami) $API_STATIC_PATH/
-        sudo chown -R $(whoami) pipe-cli/dist/
+        #sudo chown -R $(whoami) pipe-cli/dist/
     - run: | 
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
