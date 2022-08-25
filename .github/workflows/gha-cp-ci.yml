@@ -156,7 +156,7 @@ jobs:
 
     - name: distTar
       run: |
-      sudo -E bash -s <<EOF
+        sudo -E bash -s <<EOF
         apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
         python2 get-pip.py
