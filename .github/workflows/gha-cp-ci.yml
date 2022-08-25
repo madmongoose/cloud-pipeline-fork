@@ -126,25 +126,10 @@ jobs:
         mv $_OSX_CLI_PATH/dist/dist-file/pipe-osx $API_STATIC_PATH/pipe-osx
         mv $_OSX_CLI_PATH/dist/dist-folder/pipe-osx.tar.gz $API_STATIC_PATH/pipe-osx.tar.gz
 
-#    - name: Setup Environment
-#      run: |
-#        sudo -E bash -s <<EOF
-#        apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
-#        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
-#        python2 get-pip.py
-#        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-#        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-#        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-#        nvm install 10.24.1
-#        npm config set user 0
-#        npm config set unsafe-perm true
-#        python2 -m pip install awscli==1.14.56 mkdocs
-#        #deploy/gha/gha_pack_dist.sh
-#        EOF
-
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
-    - run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
+    # - name: Setup Gradle
+    #   uses: gradle/gradle-build-action@v2
+    - name: Gradle pipe-cli:buildLinux
+      run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
     - name: Fixing permissions
       run: sudo chown -R $USER:$USER ${{ github.workspace }}
@@ -153,14 +138,10 @@ jobs:
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
 
-    - name: pipe-cli:buildWin
+    - name: Gradle pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
-    
-    # - run: | 
-    #     sudo chmod -R 777 $_OSX_CLI_PATH/
-    #     sudo chmod -R 777 $API_STATIC_PATH/
 
-    - name: distTar
+    - name: Gradle distTar
       run: |
         bash -s <<EOF
         apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
@@ -175,10 +156,9 @@ jobs:
         python2 -m pip install awscli==1.14.56 mkdocs
         ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
         EOF
+    
     - name: Upload Artifact
       run: |
         sudo -E bash -s <<EOF
         deploy/gha/gha_pack_dist.sh
         EOF
-    
-
