@@ -147,8 +147,12 @@ jobs:
     - run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
     - run: | 
-        sudo mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
-        sudo mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
+        sudo chmod -R 777 $_OSX_CLI_PATH/
+        sudo chmod -R 777 $API_STATIC_PATH/
+
+    - run: | 
+        mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
+        mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
 
     - name: pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
@@ -157,10 +161,9 @@ jobs:
         sudo chmod -R 777 $_OSX_CLI_PATH/
         sudo chmod -R 777 $API_STATIC_PATH/
 
-
     - name: distTar
       run: |
-        sudo -E bash -s <<EOF
+        bash -s <<EOF
         apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
         python2 get-pip.py
