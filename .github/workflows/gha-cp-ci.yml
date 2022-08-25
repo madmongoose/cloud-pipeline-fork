@@ -146,15 +146,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - run: _BUILD_DOCKER_IMAGE="${CP_DOCKER_DIST_SRV}lifescience/cloud-pipeline:python2.7-centos6" ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildLinux --no-daemon -x :pipe-cli:test
 
-    - run: | 
-        sudo chown -R $USER:$USER ${{ github.workspace }}
-        #sudo chown -R $USER:$USER /home/github/actions-runner/_work/cloud-pipeline-fork
-        #sudo chmod -R 777 $_OSX_CLI_PATH/
-        #sudo chmod -R 777 $API_STATIC_PATH/
-        #####sudo chmod -R 777 pipe-cli/dist/
-        #sudo chown -R $(whoami) $_OSX_CLI_PATH/
-        #sudo chown -R $(whoami) $API_STATIC_PATH/
-        #sudo chown -R $(whoami) pipe-cli/dist/
+    - name: Fixing permissions
+      run: sudo chown -R $USER:$USER ${{ github.workspace }}
+
     - run: | 
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
@@ -162,9 +156,9 @@ jobs:
     - name: pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
     
-    - run: | 
-        sudo chmod -R 777 $_OSX_CLI_PATH/
-        sudo chmod -R 777 $API_STATIC_PATH/
+    # - run: | 
+    #     sudo chmod -R 777 $_OSX_CLI_PATH/
+    #     sudo chmod -R 777 $API_STATIC_PATH/
 
     - name: distTar
       run: |

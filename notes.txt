@@ -12,3 +12,14 @@ echo $GRADLE_HOME
                     --stacktrace
 #-Dorg.gradle.internal.repository.initial.backoff=500 -Dorg.gradle.internal.http.socketTimeout=1200000 -Dorg.gradle.internal.http.connectionTimeout=1200000                   
 #-Dorg.gradle.internal.http.socketTimeout=1200000 -Dorg.gradle.internal.http.connectionTimeout=1200000 --max-workers=1
+
+
+    - name: Fixing permissions
+      run: sudo chown -R $USER:$USER ${{ github.workspace }}
+        #sudo chown -R $USER:$USER /home/github/actions-runner/_work/cloud-pipeline-fork
+        #sudo chmod -R 777 $_OSX_CLI_PATH/
+        #sudo chmod -R 777 $API_STATIC_PATH/
+        #####sudo chmod -R 777 pipe-cli/dist/
+        #sudo chown -R $(whoami) $_OSX_CLI_PATH/
+        #sudo chown -R $(whoami) $API_STATIC_PATH/
+        #sudo chown -R $(whoami) pipe-cli/dist/
