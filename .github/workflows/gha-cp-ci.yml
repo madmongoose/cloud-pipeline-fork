@@ -141,7 +141,7 @@ jobs:
     - name: Gradle pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
-    - name: Gradle distTar
+    - name: Setup Environment
       run: |
         bash -s <<EOF
         apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
@@ -154,8 +154,10 @@ jobs:
         npm config set user 0
         npm config set unsafe-perm true
         python2 -m pip install awscli==1.14.56 mkdocs
-        ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
         EOF
+
+    - name: Gradle distTar
+      run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
     
     - name: Upload Artifact
       run: |
