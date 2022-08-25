@@ -148,9 +148,11 @@ jobs:
 
     - name: pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
+    
+    - run: sudo chmod -R 777 $_OSX_CLI_PATH/
 
     - name: distTar
-      run: sudo -E ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+      run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
 
     - name: Upload Artifact
       run: |
