@@ -155,8 +155,20 @@ jobs:
 
 
     - name: distTar
-      run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
-
+      run: |
+      sudo -E bash -s <<EOF
+        apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+        python2 get-pip.py
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm install 10.24.1
+        npm config set user 0
+        npm config set unsafe-perm true
+        python2 -m pip install awscli==1.14.56 mkdocs
+        ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+        EOF
     - name: Upload Artifact
       run: |
         sudo -E bash -s <<EOF
