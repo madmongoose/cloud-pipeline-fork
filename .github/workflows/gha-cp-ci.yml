@@ -141,6 +141,12 @@ jobs:
     - name: Gradle pipe-cli:buildWin
       run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
+    - name: Python Setup Action
+      uses: actions/setup-python@v4
+      with:
+        python-version: '2.7'
+    - run: python2 -m pip install awscli==1.14.56 mkdocs
+
     # - name: Setup Environment
     #   run: |
     #     bash -s <<EOF
