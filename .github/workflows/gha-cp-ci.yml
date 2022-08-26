@@ -77,7 +77,7 @@ jobs:
         retention-days: 1
 
  pack_dist:
- 
+
     needs: build_macos
     env:
       API_STATIC_PATH: api/src/main/resources/static
@@ -151,7 +151,7 @@ jobs:
       run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
 
     - name: Copying a build artifact to AWS
-      if: ${{ github.event_name == 'push' && (contains(github.ref_name, 'develop') || contains(github.ref_name, 'master')) || contains(github.ref_name, 'release')) || contains(github.ref_name, 'stage')) }}
+      if: ${{ github.event_name == 'push' && (contains(github.ref_name, 'develop') || contains(github.ref_name, 'master') || contains(github.ref_name, 'release') || contains(github.ref_name, 'stage')) }}
       run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/gha/$GITHUB_REF_NAME/
       shell: bash
       env:
