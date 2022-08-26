@@ -4,7 +4,7 @@
 # 2022
 #---------------------------------------------------------------------
 
-name: gha-cp-ci
+name: cp-ci
 
 # Controls when the workflow will run
 on:
@@ -13,7 +13,7 @@ on:
     - 'develop'
     - 'release/**'
     paths-ignore:
-      #- ".github/workflows/**"
+      - ".github/workflows/**"
       - ".README.md"
       - ".gitignore"
       - "quick-launcher/**"
@@ -21,7 +21,7 @@ on:
     branches: 
       - '**'
     paths-ignore:
-      #- ".github/workflows/**"
+      - ".github/workflows/**"
       - ".README.md"
       - ".gitignore"
       - "quick-launcher/**"
@@ -35,44 +35,48 @@ jobs:
    runs-on: macos-latest
    steps:
 
-   - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-   - name: Setup Java JDK
-     uses: actions/setup-java@v3
-     with:
-       distribution: "temurin"
-       java-version: "8"
-       cache: "gradle"
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin"
+        java-version: "8"
+        cache: "gradle"
 
-   - uses: actions/setup-node@v3
-     with:
-       node-version: 10
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
-   - name: Configure AWS Credentials
-     #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-     uses: aws-actions/configure-aws-credentials@v1
-     with:
-       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Setup Python 2.7 
+      uses: actions/setup-python@v4
+      with:
+        python-version: '2.7'
+    - run: python2 -m pip install mkdocs
 
-   - name: Python Setup Action
-     uses: actions/setup-python@v4
-     with:
-       python-version: '2.7'
+    - name: Setup Node.js 10 
+      uses: actions/setup-node@v3
+      with:
+        node-version: 10
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-   - name: Setup Gradle
-     uses: gradle/gradle-build-action@v2    
-   - run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildMac --no-daemon -x :pipe-cli:test
+    - name: Gradle pipe-cli:test
+      run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release pipe-cli:buildMac --no-daemon -x :pipe-cli:test
+    
+    - name: Packing the build artifact
+      run: tar -zcf pipe-osx-full.${{ github.run_number }}.tar.gz pipe-cli/dist
 
-   - run: tar -zcf pipe-osx-full.${{ github.run_number }}.tar.gz pipe-cli/dist
-
-   - name: Upload a build artifact on the GitHub Actions job page
-     uses: actions/upload-artifact@v3
-     with:
-       name: pipe-osx-full.${{ github.run_number }}.tar.gz
-       path: pipe-osx-full.${{ github.run_number }}.tar.gz
-       retention-days: 7
+    - name: Upload a build artifact on the GitHub Actions job page
+      uses: actions/upload-artifact@v3
+      with:
+        name: pipe-osx-full.${{ github.run_number }}.tar.gz
+        path: pipe-osx-full.${{ github.run_number }}.tar.gz
+        retention-days: 1
 
  pack_dist:
     needs: build_macos
@@ -108,7 +112,6 @@ jobs:
         node-version: 10
     
     - name: Configure AWS Credentials
-      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -120,7 +123,7 @@ jobs:
       with:
         name: pipe-osx-full.${{ github.run_number }}.tar.gz
 
-    - name: File layout 1
+    - name: Layout of assembly files 1
       run: |
         mkdir $_OSX_CLI_PATH
         rm -rf $API_STATIC_PATH/*
@@ -137,7 +140,7 @@ jobs:
     - name: Fixing permissions
       run: sudo chown -R $USER:$USER ${{ github.workspace }}
 
-    - name: File layout 2
+    - name: Layout of assembly files 2
       run: | 
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
@@ -149,8 +152,8 @@ jobs:
       run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
 
     - name: Copying a build artifact to AWS
-      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-      run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
+      if: ${{ github.event_name == 'push' && (contains(github.ref_name, 'develop') || contains(github.ref_name, 'master')) || contains(github.ref_name, 'release')) || contains(github.ref_name, 'stage')) }}
+      run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/GHA/
       shell: bash
       env:
         DIST_TGZ_NAME: build/install/dist/cloud-pipeline*
