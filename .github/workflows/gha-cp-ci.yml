@@ -148,15 +148,17 @@ jobs:
         mv pipe-cli/dist/dist-file/pipe $API_STATIC_PATH/pipe-el6
         mv pipe-cli/dist/dist-folder/pipe.tar.gz $API_STATIC_PATH/pipe-el6.tar.gz
 
-    - name: Gradle pipe-cli:buildWin
-      run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
+    # - name: Gradle pipe-cli:buildWin
+    #   run: ./gradlew -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test pipe-cli:buildWin --no-daemon
 
-    - name: Gradle distTar
-      run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
+    # - name: Gradle distTar
+    #   run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
     
+    - run: ls -a build/install/dist/
+
     - name: Copying a build artifact to AWS
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
       run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/ --recursive
       shell: bash
       env:
-        DIST_TGZ_NAME: echo build/install/dist/cloud-pipeline*
+        DIST_TGZ_NAME: $(echo build/install/dist/cloud-pipeline*)
