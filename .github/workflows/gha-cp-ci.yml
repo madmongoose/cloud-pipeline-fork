@@ -156,7 +156,7 @@ jobs:
     
     - name: Copying a build artifact to AWS
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-      run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
+      run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/ --recursive
       shell: bash
       env:
         DIST_TGZ_NAME: echo build/install/dist/cloud-pipeline*
