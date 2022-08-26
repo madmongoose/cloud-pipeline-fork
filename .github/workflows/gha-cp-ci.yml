@@ -160,4 +160,4 @@ jobs:
       run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
       shell: bash
       env:
-        DIST_TGZ_NAME: $(echo build/install/dist/cloud-pipeline*)
+        DIST_TGZ_NAME: build/install/dist/cloud-pipeline*
