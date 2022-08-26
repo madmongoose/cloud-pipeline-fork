@@ -154,7 +154,7 @@ jobs:
     # - name: Gradle distTar
     #   run: ./gradlew distTar -PbuildNumber=${{ github.run_number }}.${{ github.sha }} -Pprofile=release -x test -Pfast --no-daemon -x pipe-cli:buildLinux -x pipe-cli:buildWin
     
-    - run: ls -a build/install/dist/
+    - run: ls -R
 
     - name: Copying a build artifact to AWS
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
