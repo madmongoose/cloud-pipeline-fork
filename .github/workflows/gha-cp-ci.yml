@@ -95,8 +95,8 @@ jobs:
         java-version: "8"
         cache: "gradle"
 
-    # - name: Setup Gradle
-    #   uses: gradle/gradle-build-action@v2
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
     - name: Setup Python 2.7 
       uses: actions/setup-python@v4
@@ -156,7 +156,6 @@ jobs:
 
     - name: Copying a build artifact to AWS
       #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-      #run: aws s3 cp build/install/dist/cloud-pipeline* s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
       run: aws s3 cp $DIST_TGZ_NAME s3://cloud-pipeline-oss-test/builds/$GITHUB_REF_NAME/
       shell: bash
       env:
