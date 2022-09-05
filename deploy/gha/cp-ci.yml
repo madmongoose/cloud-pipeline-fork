@@ -1,0 +1,103 @@
+#---------------------------------------------------------------------
+# GitHub Action Workflow for Cloud-Pipeline
+# Version 1.0
+# 2022
+#---------------------------------------------------------------------
+
+name: cp-ci
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: 
+    - 'develop'
+    - 'release/**'
+    paths-ignore:
+      #- ".github/workflows/**"
+      - ".README.md"
+      - ".gitignore"
+      - "quick-launcher/**"
+  pull_request:
+    branches: 
+      - '**'
+    paths-ignore:
+      #- ".github/workflows/**"
+      - ".README.md"
+      - ".gitignore"
+      - "quick-launcher/**"
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  build1:
+    runs-on: macos-latest
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin" # See 'Supported distributions' for available options
+        java-version: "8"
+        cache: "gradle"
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 10
+
+    - name: Configure AWS Credentials
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: Buld only for macOS
+      run: bash deploy/gha/gha_build_macos.sh    
+  
+  build2:
+    needs: build1
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin" # See 'Supported distributions' for available options
+        java-version: "8"
+        cache: "gradle"
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 10
+    
+    - name: Configure AWS Credentials
+      #if: ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: mybuild-2004
+      run: |
+        sudo -E bash -s <<EOF
+        apt update -y && apt install -y openjdk-8-jdk git curl python2-minimal
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+        python2 get-pip.py
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm install 10.24.1
+        npm config set user 0
+        npm config set unsafe-perm true
+        python2 -m pip install awscli==1.14.56 mkdocs
+        deploy/gha/gha_pack_dist.sh
+        EOF
